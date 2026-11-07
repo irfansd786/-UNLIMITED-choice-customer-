@@ -62,7 +62,7 @@ export default function Home() {
       <FloatingSneakersShowcase />
 
       {/* 2. "SHOP BY CATEGORY" — Single Row Premium Circular Cards */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 sm:pt-2 pb-4">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-4 scroll-mt-24">
         <div className="text-center mb-4 sm:mb-8">
           <div className="flex items-center justify-center gap-2.5 sm:gap-4 mb-2">
             <span className="w-8 sm:w-16 h-px bg-gold-500/60"></span>
