@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || (
   typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://unlimited-choice-backend.onrender.com/api'
-    : 'http://localhost:8000/api'
+    ? 'https://unlimited-choice-backend.onrender.com//api'
+    : 'https://unlimited-choice-backend.onrender.com/api'
 );
 
 const api = axios.create({
@@ -30,9 +30,10 @@ api.interceptors.response.use(
     let message = Array.isArray(detail)
       ? detail.map(d => d.msg || d.message).join(', ')
       : detail || error.message || 'An unexpected error occurred. Please try again.';
-    
-    // Auto logout and friendly message on 401
-    if (error.response?.status === 401) {
+
+    // Auto logout and friendly message on 401 (preserve login error details)
+    const isLoginRequest = error.config?.url?.includes('/auth/login');
+    if (error.response?.status === 401 && !isLoginRequest) {
       message = 'Please sign in to proceed';
       if (localStorage.getItem('varshi_customer_token')) {
         localStorage.removeItem('varshi_customer_token');

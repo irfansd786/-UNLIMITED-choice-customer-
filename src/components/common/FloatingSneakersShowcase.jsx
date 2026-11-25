@@ -548,7 +548,7 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
       onTouchEnd={handleTouchEnd}
       className={`relative w-full overflow-hidden select-none bg-white text-gray-900 flex flex-col justify-between transition-colors duration-500 ${isStandalonePage
         ? 'min-h-[calc(100vh-60px)] py-4 sm:py-6'
-        : 'min-h-0 md:min-h-[750px] pt-2 md:pt-4 pb-4 md:pb-2 my-0'
+        : 'min-h-[490px] sm:min-h-[650px] md:min-h-[750px] pt-2 md:pt-4 pb-3 md:pb-2 my-0'
         }`}
     >
       {/* PURE WHITE CANVAS BACKGROUND */}
@@ -562,217 +562,15 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full relative z-10 flex flex-col justify-between flex-1">
 
         {/* =========================================================================
-            MOBILE-FIRST SNEAKER SHOWCASE (< 768px Viewports: 320px - 767px)
-            Properly proportioned, non-overlapping, sequential luxury fashion layout
+            UNIFIED 3D ORBITAL MAIN STAGE (All Viewports: Mobile -> Desktop)
+            Preserves the half-moon arc, floating sneakers, and metallic slider
             ========================================================================= */}
-        <div className="block md:hidden w-full py-2 space-y-4">
-          
-          {/* 1. PRODUCT INFORMATION HEADER */}
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-100 border border-stone-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[10px] font-bold tracking-widest uppercase text-stone-700">
-                Streetwear Footwear
-              </span>
-            </div>
-
-            {/* Title with TAN MON CHERI font styling */}
-            <div
-              onClick={() => navigate(`/products/${current.slug}`)}
-              className="cursor-pointer group select-none"
-              title="Click to view details"
-            >
-              <h1 className="font-mon-cheri text-2xl sm:text-3xl font-black tracking-wide text-black uppercase leading-tight">
-                {current.titleLine1} {current.titleLine2}
-              </h1>
-            </div>
-
-            {/* Price Line with Strikethrough & Discount Badge */}
-            <div className="flex items-center gap-2.5 flex-wrap pt-0.5">
-              <span className="text-2xl font-black text-gray-950 tracking-tight font-sans">
-                ₹{current.price.toLocaleString('en-IN')}
-              </span>
-              {current.originalPrice && (
-                <span className="text-sm font-medium text-gray-400 line-through tracking-tight font-sans">
-                  ₹{current.originalPrice.toLocaleString('en-IN')}
-                </span>
-              )}
-              {current.originalPrice && (
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                  {Math.round(((current.originalPrice - current.price) / current.originalPrice) * 100)}% OFF
-                </span>
-              )}
-            </div>
-
-            {/* Selected Size indicator badge */}
-            <div className="flex items-center gap-2 text-xs font-semibold text-stone-500 pt-0.5">
-              <span>Selected Size:</span>
-              <span className="bg-stone-100 text-stone-900 px-2 py-0.5 rounded font-mono font-bold border border-stone-200">
-                EU {selectedSize}
-              </span>
-            </div>
-
-            {/* Reference Accent Bar */}
-            <div 
-              className="w-12 h-1 rounded-full transition-colors duration-300 mt-1" 
-              style={{ backgroundColor: current.accentColor || '#16A34A' }}
-            />
-          </div>
-
-          {/* 2. MAIN SHOE PRESENTATION (Centered Visual Focus + Satellite Carousel) */}
-          <div className="relative w-full py-2 flex flex-col items-center justify-center overflow-hidden">
-            {/* Ambient Background Aura */}
-            <div className="absolute inset-0 bg-gradient-to-b from-stone-50/50 via-white to-transparent rounded-2xl pointer-events-none" />
-
-            {/* Primary Hero Shoe Container */}
-            <div 
-              className="relative w-full max-w-[320px] sm:max-w-[360px] h-[180px] sm:h-[210px] flex items-center justify-center cursor-pointer transition-transform active:scale-98"
-              onClick={() => navigate(`/products/${current.slug}`)}
-              onDoubleClick={() => handleShoeDoubleClick(current)}
-              title="Tap to view product details"
-            >
-              {/* Contact Ground Shadow */}
-              <div className="absolute bottom-1 w-[220px] sm:w-[250px] h-4 bg-black/20 rounded-[100%] blur-md pointer-events-none" />
-
-              {/* Main Shoe Cutout */}
-              <img
-                src={current.image}
-                alt={current.fullName}
-                data-hero-shoe="true"
-                data-shoe-id={current.id}
-                className="w-full h-full object-contain drop-shadow-md select-none"
-                style={{
-                  transform: current.needsFlip ? 'scaleX(-1)' : 'scaleX(1)',
-                  imageRendering: '-webkit-optimize-contrast',
-                }}
-                loading="eager"
-                draggable={false}
-              />
-            </div>
-
-            {/* Mini Swipeable Sneaker Selector Strip */}
-            <div className="w-full mt-3">
-              <div className="flex items-center justify-between text-[11px] text-stone-500 font-semibold px-0.5 mb-1.5">
-                <span>Other Colorways & Models ({total})</span>
-                <span className="text-[10px] text-stone-400">Swipe to select</span>
-              </div>
-
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none snap-x px-0.5">
-                {sneakers.map((shoe, idx) => {
-                  const isActive = idx === activeIndex;
-                  return (
-                    <button
-                      key={shoe.id || idx}
-                      type="button"
-                      onClick={() => handleSelectShoe(idx)}
-                      className={`flex-shrink-0 snap-center flex items-center gap-2 px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
-                        isActive
-                          ? 'bg-stone-900 text-white border-stone-900 shadow-sm scale-102'
-                          : 'bg-stone-50 hover:bg-stone-100 text-stone-700 border-stone-200'
-                      }`}
-                    >
-                      <img
-                        src={shoe.image}
-                        alt={shoe.fullName}
-                        className="w-9 h-6 object-contain"
-                        style={{ transform: shoe.needsFlip ? 'scaleX(-1)' : 'scaleX(1)' }}
-                      />
-                      <div className="flex flex-col text-left">
-                        <span className="text-[10px] font-bold leading-none truncate max-w-[80px]">
-                          {shoe.titleLine2}
-                        </span>
-                        <span className={`text-[9px] mt-0.5 leading-none ${isActive ? 'text-emerald-400' : 'text-stone-500'}`}>
-                          ₹{shoe.price.toLocaleString('en-IN')}
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* 3. SIZE SELECTOR REDESIGN */}
-          <div className="w-full space-y-2 pt-1 border-t border-stone-100">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-stone-900">Select Shoe Size</span>
-              <span className="text-xs font-semibold text-stone-500">
-                Selected: <strong className="text-black font-mono">EU {selectedSize}</strong>
-              </span>
-            </div>
-
-            {/* 7 Responsive Equal Dimensions Size Buttons */}
-            <div 
-              className="grid grid-cols-7 gap-1.5"
-              role="radiogroup"
-              aria-label="Sneaker Sizes"
-            >
-              {current.sizes.map((size) => {
-                const isSelected = selectedSize === size;
-                return (
-                  <button
-                    key={size}
-                    type="button"
-                    role="radio"
-                    aria-checked={isSelected}
-                    onClick={() => setSelectedSize(size)}
-                    className={`h-11 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center cursor-pointer select-none ${
-                      isSelected
-                        ? 'bg-black text-white border-2 border-black shadow-sm'
-                        : 'bg-stone-50 text-stone-800 border border-stone-200 hover:border-stone-400 active:scale-95'
-                    }`}
-                  >
-                    {size}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 4. PRODUCT ACTION BUTTONS: ADD TO BAG & BUY NOW */}
-          <div className="w-full pt-1 flex items-center gap-2.5">
-            {/* Add to Bag Button */}
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              className="flex-1 h-12 inline-flex items-center justify-center gap-2 px-3 rounded-full bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm active:scale-95 cursor-pointer"
-            >
-              {isAdded ? (
-                <>
-                  <Check className="w-4 h-4 text-emerald-400" />
-                  <span>Added To Bag</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Add To Bag</span>
-                </>
-              )}
-            </button>
-
-            {/* Buy Now Button -> Direct Checkout */}
-            <button
-              type="button"
-              onClick={handleBuyNow}
-              disabled={isBuying}
-              className="flex-1 h-12 inline-flex items-center justify-center gap-1.5 px-3 rounded-full bg-[#173D30] hover:bg-[#122B22] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm active:scale-95 cursor-pointer"
-            >
-              <Zap className="w-4 h-4 fill-white text-white" />
-              <span>{isBuying ? 'Proceeding...' : 'Buy Now'}</span>
-            </button>
-          </div>
-        </div>
-
-        {/* =========================================================================
-            DESKTOP MAIN STAGE (md:flex and above: 768px - 1440px+)
-            Preserves the original half-moon arc, floating sneakers, and metallic slider
-            ========================================================================= */}
-        <div className="hidden md:flex relative w-full flex-1 flex-col justify-between min-h-[580px] md:min-h-[630px] pt-2 pb-0">
+        <div className="flex relative w-full flex-1 flex-col justify-between min-h-[470px] sm:min-h-[580px] md:min-h-[630px] pt-2 pb-0">
 
           {/* =========================================================================
               1. LEFT EDITORIAL HEADER: TAN MON CHERI FONT, PRICE, ADD TO CART & BUY NOW
               ========================================================================= */}
-          <div className="absolute top-2 sm:top-4 left-0 z-[70] max-w-sm pointer-events-auto">
+          <div className="absolute top-1 sm:top-4 left-0 z-[70] max-w-[240px] sm:max-w-sm pointer-events-auto">
             {/* Title with TAN MON CHERI font styling */}
             <div
               onClick={() => navigate(`/products/${current.slug}`)}
@@ -780,27 +578,27 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
               className="cursor-pointer group select-none"
               title="Double-click to glide to product details"
             >
-              <h1 className="font-mon-cheri text-4xl sm:text-5xl md:text-6xl font-black tracking-wide text-black uppercase leading-[0.92] drop-shadow-xs">
+              <h1 className="font-mon-cheri text-3xl sm:text-5xl md:text-6xl font-black tracking-wide text-black uppercase leading-[0.92] drop-shadow-xs">
                 {current.titleLine1}
               </h1>
-              <h2 className="font-mon-cheri text-3xl sm:text-4xl md:text-5xl font-black tracking-wide text-black uppercase leading-[0.92] mt-1 drop-shadow-xs">
+              <h2 className="font-mon-cheri text-2xl sm:text-4xl md:text-5xl font-black tracking-wide text-black uppercase leading-[0.92] mt-1 drop-shadow-xs">
                 {current.titleLine2}
               </h2>
             </div>
 
             {/* Price Tag Directly Below the Name (Indian Rupees with Strikethrough) */}
-            <div className="mt-3.5 sm:mt-4">
-              <div className="flex items-baseline gap-3 flex-wrap">
-                <span className="text-2xl sm:text-3xl font-black text-gray-950 tracking-tight font-sans">
+            <div className="mt-2.5 sm:mt-4">
+              <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
+                <span className="text-xl sm:text-3xl font-black text-gray-950 tracking-tight font-sans">
                   ₹{current.price.toLocaleString('en-IN')}
                 </span>
                 {current.originalPrice && (
-                  <span className="text-base sm:text-lg font-medium text-gray-400 line-through tracking-tight font-sans">
+                  <span className="text-sm sm:text-lg font-medium text-gray-400 line-through tracking-tight font-sans">
                     ₹{current.originalPrice.toLocaleString('en-IN')}
                   </span>
                 )}
                 {current.originalPrice && (
-                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] sm:text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full">
                     {Math.round(((current.originalPrice - current.price) / current.originalPrice) * 100)}% OFF
                   </span>
                 )}
@@ -808,13 +606,13 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
 
               {/* Reference Accent Bar */}
               <div 
-                className="w-14 sm:w-16 h-1 rounded-full mt-2.5 transition-colors duration-300" 
+                className="w-12 sm:w-16 h-1 rounded-full mt-2 sm:mt-2.5 transition-colors duration-300" 
                 style={{ backgroundColor: current.accentColor || '#16A34A' }}
               />
             </div>
 
             {/* Selected Size Badge */}
-            <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-gray-500">
+            <div className="mt-2 sm:mt-3 flex items-center gap-2 text-[11px] sm:text-xs font-semibold text-gray-500">
               <span>Selected Size:</span>
               <span className="bg-stone-100 text-stone-900 px-2 py-0.5 rounded font-mono font-bold border border-stone-200">
                 EU {selectedSize}
@@ -822,12 +620,12 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
             </div>
 
             {/* Action Buttons: Add to Bag & Buy Now */}
-            <div className="mt-4 flex flex-wrap items-center gap-2.5">
+            <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-2.5">
               {/* Add to Bag Button */}
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-xs hover:shadow-md active:scale-95 cursor-pointer"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-full bg-black hover:bg-neutral-800 text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-xs hover:shadow-md active:scale-95 cursor-pointer"
               >
                 {isAdded ? (
                   <>
@@ -847,7 +645,7 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
                 type="button"
                 onClick={handleBuyNow}
                 disabled={isBuying}
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#16A34A] hover:bg-[#15803D] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs hover:shadow-md active:scale-95 cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-full bg-[#16A34A] hover:bg-[#15803D] text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all shadow-xs hover:shadow-md active:scale-95 cursor-pointer"
               >
                 <Zap className="w-3.5 h-3.5 fill-white text-white" />
                 <span>{isBuying ? 'Proceeding...' : 'Buy Now'}</span>
@@ -861,7 +659,7 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
               2. SNEAKER CANVAS: 7 SNEAKERS IN HALF-MOON ARC, ALL CRISP & FACING LEFT
               (Shifted down lightly to eliminate bottom gap & fill canvas gracefully)
               ========================================================================= */}
-          <div className="relative w-full h-[460px] sm:h-[520px] md:h-[570px] flex items-center justify-center overflow-visible translate-y-6 sm:translate-y-9 md:translate-y-12">
+          <div className="relative w-full h-[360px] sm:h-[520px] md:h-[570px] flex items-center justify-center overflow-visible translate-y-16 sm:translate-y-9 md:translate-y-12">
 
             <div className="relative w-full h-full flex items-center justify-center">
               {sneakers.map((shoe, index) => {
@@ -1021,13 +819,13 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
                 3. INTERACTIVE DRAGGABLE METALLIC SLIDER LINE (PURE NEUTRAL & SILKY SMOOTH)
                 (100% Contained Inside The Capsule Track - Zero Overhang)
                 ========================================================================= */}
-            <div className="absolute bottom-5 sm:bottom-7 md:bottom-8 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center pointer-events-auto">
+            <div className="absolute bottom-3 sm:bottom-7 md:bottom-8 left-1 sm:left-1/2 sm:-translate-x-1/2 z-40 flex flex-col items-center pointer-events-auto">
               {/* Draggable Metallic Capsule Track - 100% Neutral, Zero Green */}
               <div
                 ref={trackRef}
                 onMouseDown={handleTrackMouseDown}
                 onTouchStart={handleTrackTouchStart}
-                className="w-56 sm:w-72 md:w-80 h-4.5 sm:h-5 rounded-full bg-gradient-to-r from-stone-400 via-stone-200 to-stone-400 border border-stone-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.22),0_2px_8px_rgba(0,0,0,0.08)] relative cursor-grab active:cursor-grabbing select-none p-0.5 overflow-hidden transition-shadow hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] group flex items-center"
+                className="w-44 sm:w-72 md:w-80 h-6 sm:h-5 rounded-full bg-gradient-to-r from-stone-400 via-stone-200 to-stone-400 border border-stone-400/90 shadow-[inset_0_2px_4px_rgba(0,0,0,0.25),0_2px_8px_rgba(0,0,0,0.12)] relative cursor-grab active:cursor-grabbing select-none p-0.5 overflow-hidden transition-shadow hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] group flex items-center"
                 title="Drag smoothly to rotate sneakers"
               >
                 {/* Inner Track Runway: 100% Constrains the Pill Thumb Inside */}
@@ -1058,12 +856,12 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
                 ========================================================================= */}
             <div className="absolute bottom-2 sm:bottom-4 md:bottom-5 right-0 sm:right-2 z-[70] pointer-events-auto">
               <div
-                className="flex flex-col gap-2 sm:gap-2.5"
+                className="flex flex-col gap-1.5 sm:gap-2.5"
                 role="radiogroup"
                 aria-label="Sneaker Sizes"
               >
                 {/* Row 1: 40, 41, 42, 43 */}
-                <div className="flex items-center gap-2 sm:gap-2.5">
+                <div className="flex items-center gap-1.5 sm:gap-2.5">
                   {current.sizes.slice(0, 4).map((size) => {
                     const isSelected = selectedSize === size;
                     return (
@@ -1073,7 +871,7 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
                         role="radio"
                         aria-checked={isSelected}
                         onClick={() => setSelectedSize(size)}
-                        className={`w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl text-xs sm:text-sm md:text-base font-bold transition-all duration-150 flex items-center justify-center cursor-pointer select-none ${isSelected
+                        className={`w-8 h-8 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-lg sm:rounded-xl text-[11px] sm:text-sm md:text-base font-bold transition-all duration-150 flex items-center justify-center cursor-pointer select-none ${isSelected
                           ? 'bg-black text-white border-2 border-black shadow-sm scale-102'
                           : 'bg-white text-stone-800 border-2 border-stone-200/90 hover:border-stone-400 shadow-2xs hover:shadow-xs hover:bg-stone-50 active:scale-95'
                           }`}
@@ -1085,7 +883,7 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
                 </div>
 
                 {/* Row 2: 44, 45, 46 (Left-aligned under 40, 41, 42) */}
-                <div className="flex items-center gap-2 sm:gap-2.5">
+                <div className="flex items-center gap-1.5 sm:gap-2.5">
                   {current.sizes.slice(4).map((size) => {
                     const isSelected = selectedSize === size;
                     return (
@@ -1095,7 +893,7 @@ export default function FloatingSneakersShowcase({ isStandalonePage = false }) {
                         role="radio"
                         aria-checked={isSelected}
                         onClick={() => setSelectedSize(size)}
-                        className={`w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl text-xs sm:text-sm md:text-base font-bold transition-all duration-150 flex items-center justify-center cursor-pointer select-none ${isSelected
+                        className={`w-8 h-8 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-lg sm:rounded-xl text-[11px] sm:text-sm md:text-base font-bold transition-all duration-150 flex items-center justify-center cursor-pointer select-none ${isSelected
                           ? 'bg-black text-white border-2 border-black shadow-sm scale-102'
                           : 'bg-white text-stone-800 border-2 border-stone-200/90 hover:border-stone-400 shadow-2xs hover:shadow-xs hover:bg-stone-50 active:scale-95'
                           }`}

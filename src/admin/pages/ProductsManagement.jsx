@@ -37,7 +37,7 @@ export default function ProductsManagement() {
     stock: 10,
     low_stock_threshold: 5,
     status: 'PUBLISHED',
-    brand: 'Varshi Enterprises',
+    brand: 'UNLIMITED choice',
     material: '',
     is_featured: false,
     is_new_arrival: true,
@@ -82,7 +82,7 @@ export default function ProductsManagement() {
       stock: 10,
       low_stock_threshold: 5,
       status: 'PUBLISHED',
-      brand: 'Varshi Enterprises',
+      brand: 'UNLIMITED choice',
       material: '',
       is_featured: false,
       is_new_arrival: true,
@@ -257,7 +257,7 @@ export default function ProductsManagement() {
                         />
                         <div className="min-w-0">
                           <h4 className="font-semibold text-[#252A27] truncate max-w-xs">{p.name}</h4>
-                          <span className="text-[10px] text-[#727A74]">{p.brand || 'Varshi Enterprises'}</span>
+                          <span className="text-[10px] text-[#727A74]">{p.brand || 'UNLIMITED choice'}</span>
                         </div>
                       </div>
                     </td>

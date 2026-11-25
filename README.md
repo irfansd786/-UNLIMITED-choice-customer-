@@ -101,7 +101,7 @@ customer/
 │   │
 │   ├── context/                # Fly-to-cart animation context
 │   ├── pages/                  # Home, Products, ProductDetails, Studio, OutfitStudio, Cart, Checkout, Login
-│   ├── services/               # Axios API client connecting to http://localhost:8000/api
+│   ├── services/               # Axios API client connecting to https://unlimited-choice-backend.onrender.com/api
 │   ├── store/                  # useAuthStore, useCartStore, useWishlistStore, useToastStore
 │   ├── App.jsx                 # Unified routing configuration for customer & admin
 │   ├── index.css               # Tailwind CSS & custom styling

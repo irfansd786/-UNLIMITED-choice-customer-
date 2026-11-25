@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Settings as SettingsIcon, Store, ShieldCheck, Mail, Phone, MapPin, Save, CheckCircle2 } from 'lucide-react';
 
 export default function Settings() {
-  const [storeName, setStoreName] = useState('VARSHI ENTERPRISES');
+  const [storeName, setStoreName] = useState('UNLIMITED choice');
   const [supportEmail, setSupportEmail] = useState('care@varshienterprises.com');
   const [supportPhone, setSupportPhone] = useState('+91 98765 43210');
   const [headOffice, setHeadOffice] = useState('Varshi Commercial Complex, MG Road, Bengaluru - 560001');

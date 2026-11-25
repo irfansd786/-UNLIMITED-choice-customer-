@@ -72,7 +72,7 @@ export default function AIBusinessAssistant() {
           {
             id: 'welcome',
             role: 'assistant',
-            content: `${greeting} I am your Varshi Enterprises Jarvis AI Operations Manager. I have complete visibility into live customer store traffic, inventory, pending orders, and customer feedback. How may I assist you today?`,
+            content: `${greeting} I am your UNLIMITED choice Jarvis AI Operations Manager. I have complete visibility into live customer store traffic, inventory, pending orders, and customer feedback. How may I assist you today?`,
             created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }
         ]);
@@ -155,10 +155,14 @@ export default function AIBusinessAssistant() {
         loadConversations();
       }
 
+      const cleanReply = typeof res.reply === 'string'
+        ? res.reply.replace(/varshi\s+enterprises/gi, 'UNLIMITED choice')
+        : res.reply;
+
       const asstMsg = {
         id: res.message_id || 'asst-' + Date.now(),
         role: 'assistant',
-        content: res.reply,
+        content: cleanReply,
         action_type: res.action_type,
         action_data: res.action_payload,
         requires_confirmation: res.requires_confirmation,
@@ -167,10 +171,10 @@ export default function AIBusinessAssistant() {
 
       setMessages(prev => [...prev, asstMsg]);
 
-      if (autoSpeak && res.reply) {
+      if (autoSpeak && cleanReply) {
         setIsPlayingAudio(true);
         speakJarvis(
-          res.reply,
+          cleanReply,
           () => setIsPlayingAudio(true),
           () => setIsPlayingAudio(false)
         );
@@ -276,10 +280,14 @@ export default function AIBusinessAssistant() {
         loadConversations();
       }
 
+      const cleanReply = typeof res.reply === 'string'
+        ? res.reply.replace(/varshi\s+enterprises/gi, 'UNLIMITED choice')
+        : res.reply;
+
       const asstMsg = {
         id: res.message_id || 'asst-' + Date.now(),
         role: 'assistant',
-        content: res.reply,
+        content: cleanReply,
         action_type: res.action_type,
         action_data: res.action_payload,
         requires_confirmation: res.requires_confirmation,
@@ -288,10 +296,10 @@ export default function AIBusinessAssistant() {
 
       setMessages(prev => [...prev, asstMsg]);
 
-      if (autoSpeak && res.reply) {
+      if (autoSpeak && cleanReply) {
         setIsPlayingAudio(true);
         speakJarvis(
-          res.reply,
+          cleanReply,
           () => setIsPlayingAudio(true),
           () => setIsPlayingAudio(false)
         );
@@ -363,7 +371,7 @@ export default function AIBusinessAssistant() {
                   24/7 Sentinel
                 </span>
               </div>
-              <p className="text-[11px] text-[#727A74]">Varshi Enterprises Operations & Store Intelligence</p>
+              <p className="text-[11px] text-[#727A74]">UNLIMITED choice Operations & Store Intelligence</p>
             </div>
           </div>
 

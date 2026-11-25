@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Heart, ShoppingBag, Check, Zap } from 'lucide-react';
 import { useWishlistStore } from '../../store/useWishlistStore';
@@ -66,13 +66,46 @@ export default function ProductCard({ product }) {
   const { flyToCart, flyToWishlist } = useFlyAnimation();
   const navigate = useNavigate();
 
+  const cardRef = useRef(null);
   const imgRef = useRef(null);
 
   // Interaction States
   const [selectedSize, setSelectedSize] = useState(null);
   const [sizeError, setSizeError] = useState(false);
+  const [showSizes, setShowSizes] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
+
+  // Close sizes when another product card opens sizes or when tapping outside
+  useEffect(() => {
+    if (showSizes) {
+      window.dispatchEvent(new CustomEvent('productcard:open-sizes', { detail: product?.id }));
+    }
+
+    const handleOtherCardOpen = (e) => {
+      if (e.detail !== product?.id) {
+        setShowSizes(false);
+      }
+    };
+
+    const handleOutsidePress = (e) => {
+      if (showSizes && cardRef.current && !cardRef.current.contains(e.target)) {
+        setShowSizes(false);
+      }
+    };
+
+    window.addEventListener('productcard:open-sizes', handleOtherCardOpen);
+    if (showSizes) {
+      document.addEventListener('touchstart', handleOutsidePress, { passive: true });
+      document.addEventListener('mousedown', handleOutsidePress);
+    }
+
+    return () => {
+      window.removeEventListener('productcard:open-sizes', handleOtherCardOpen);
+      document.removeEventListener('touchstart', handleOutsidePress);
+      document.removeEventListener('mousedown', handleOutsidePress);
+    };
+  }, [showSizes, product?.id]);
 
   // Pricing & Metadata
   const price = Math.round(product?.price || 0);
@@ -167,6 +200,7 @@ export default function ProductCard({ product }) {
     }
 
     setSizeError(false);
+    setShowSizes(false);
     setIsAdding(true);
 
     const sourceEl = imgRef.current || e.currentTarget.closest('.group')?.querySelector('img');
@@ -189,7 +223,6 @@ export default function ProductCard({ product }) {
       };
 
       await addItem(product.id, 1, productHint);
-      addToast(`Added "${product.name}" (${selectedSize}) to bag!`, 'success');
       setAddedSuccess(true);
       setTimeout(() => setAddedSuccess(false), 2000);
     } catch (err) {
@@ -216,6 +249,7 @@ export default function ProductCard({ product }) {
     }
 
     setSizeError(false);
+    setShowSizes(false);
     setIsAdding(true);
 
     const sourceEl = imgRef.current || e.currentTarget.closest('.group')?.querySelector('img');
@@ -250,7 +284,15 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="group relative bg-white rounded-xl border border-neutral-200/80 hover:border-[#16382C]/30 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden text-left">
+    <div
+      ref={cardRef}
+      onMouseEnter={() => setShowSizes(true)}
+      onMouseLeave={() => setShowSizes(false)}
+      onPointerEnter={(e) => {
+        if (e.pointerType !== 'touch') setShowSizes(true);
+      }}
+      className="group relative bg-white rounded-xl border border-neutral-200/80 hover:border-[#16382C]/30 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden text-left"
+    >
       {/* =========================================================================
           TOP: PRODUCT IMAGE CONTAINER (Aspect Ratio 3:4)
           Strictly fixed height & aspect ratio so hover overlays never cause layout shifts!
@@ -292,6 +334,21 @@ export default function ProductCard({ product }) {
           />
         </button>
 
+        {/* Mobile Quick-Size Trigger Pill (shown when sizes overlay is closed) */}
+        {!showSizes && !sizeError && !isOutOfStock && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowSizes(true);
+            }}
+            className="sm:hidden absolute bottom-2 right-2 z-10 px-2 py-0.5 rounded-full bg-white/95 backdrop-blur-xs border border-neutral-200 text-[9px] font-bold uppercase tracking-wider text-[#16382C] shadow-xs"
+          >
+            {selectedSize ? `Size: ${selectedSize}` : 'Sizes'}
+          </button>
+        )}
+
         {/* =========================================================================
             SLIDE-UP SIZES OVERLAY ON HOVER OR WHEN SIZE REQUIRED
             Visible when cursor hovers on the product card OR when user tries to 
@@ -306,7 +363,9 @@ export default function ProductCard({ product }) {
           className={`absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-md px-2 py-2.5 border-t shadow-md transition-all duration-300 ease-out z-20 ${
             sizeError
               ? 'translate-y-0 opacity-100 pointer-events-auto border-red-500 ring-2 ring-red-400/40 bg-red-50/90'
-              : 'border-neutral-200/80 translate-y-full opacity-0 pointer-events-none group-hover:translate-y-0 group-hover:opacity-100 group-hover:pointer-events-auto'
+              : showSizes
+              ? 'translate-y-0 opacity-100 pointer-events-auto border-neutral-200/80'
+              : 'border-neutral-200/80 translate-y-full opacity-0 pointer-events-none'
           }`}
         >
           <div className="flex items-center justify-between mb-1.5 px-0.5">
@@ -357,7 +416,7 @@ export default function ProductCard({ product }) {
           BOTTOM: PRODUCT CONTENT DETAILS
           Permanently visible, clean typography, completely unobstructed by hover
           ========================================================================= */}
-      <div className="p-3 sm:p-3.5 flex flex-col justify-between flex-1 bg-white">
+      <div className="p-2.5 sm:p-3.5 flex flex-col justify-between flex-1 bg-white">
         <div>
           {/* Clean Category Header */}
           <div className="text-[10px] mb-1">
@@ -378,19 +437,19 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Pricing & Free Delivery Notice */}
-        <div className="pt-2 mt-2 border-t border-neutral-100 flex items-center justify-between">
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-xs sm:text-sm font-bold text-[#16382C]">
+        <div className="pt-2 mt-2 border-t border-neutral-100 flex items-center justify-between gap-1">
+          <div className="flex items-baseline gap-1 sm:gap-1.5 min-w-0">
+            <span className="text-xs sm:text-sm font-bold text-[#16382C] whitespace-nowrap">
               ₹{price.toLocaleString('en-IN')}
             </span>
             {hasDiscount && (
-              <span className="text-[10px] text-neutral-400 line-through">
+              <span className="text-[9.5px] sm:text-[10px] text-neutral-400 line-through whitespace-nowrap">
                 ₹{compareAtPrice.toLocaleString('en-IN')}
               </span>
             )}
           </div>
 
-          <span className="text-[9.5px] font-medium text-neutral-400">
+          <span className="text-[9px] sm:text-[9.5px] font-medium text-neutral-400 whitespace-nowrap flex-shrink-0">
             {isOutOfStock ? (
               <span className="text-red-600 font-semibold">Out of Stock</span>
             ) : (
@@ -405,7 +464,7 @@ export default function ProductCard({ product }) {
             type="button"
             onClick={handleAddToCart}
             disabled={isOutOfStock || isAdding}
-            className={`flex-1 py-1.5 px-2 rounded-lg border text-[10.5px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 transition-all ${
+            className={`flex-1 min-w-0 py-1.5 px-1.5 sm:px-2 rounded-lg border text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-normal sm:tracking-wider flex items-center justify-center gap-1 transition-all ${
               addedSuccess
                 ? 'bg-emerald-700 text-white border-emerald-700'
                 : sizeError
@@ -416,20 +475,25 @@ export default function ProductCard({ product }) {
           >
             {addedSuccess ? (
               <>
-                <Check className="w-3 h-3 text-white" />
+                <Check className="w-3 h-3 text-white flex-shrink-0" />
                 <span className="truncate">Added!</span>
               </>
             ) : (
               <>
-                <ShoppingBag className={`w-3 h-3 ${sizeError ? 'text-red-600' : 'text-[#C5A16E]'}`} />
+                <ShoppingBag className={`w-3 h-3 flex-shrink-0 ${sizeError ? 'text-red-600' : 'text-[#C5A16E]'}`} />
                 <span className="truncate">
-                  {isAdding
-                    ? 'Adding...'
-                    : sizeError
-                    ? 'Pick Size'
-                    : selectedSize
-                    ? `+ Bag (${selectedSize})`
-                    : 'Add to Bag'}
+                  {isAdding ? (
+                    'Adding...'
+                  ) : sizeError ? (
+                    'Pick Size'
+                  ) : selectedSize ? (
+                    `+ Bag (${selectedSize})`
+                  ) : (
+                    <>
+                      <span className="sm:hidden">Bag</span>
+                      <span className="hidden sm:inline">Add to Bag</span>
+                    </>
+                  )}
                 </span>
               </>
             )}
@@ -438,16 +502,25 @@ export default function ProductCard({ product }) {
             type="button"
             onClick={handleOrderNow}
             disabled={isOutOfStock}
-            className={`flex-1 py-1.5 px-2 rounded-lg text-[10.5px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 transition-all shadow-xs ${
+            className={`flex-1 min-w-0 py-1.5 px-1.5 sm:px-2 rounded-lg text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-normal sm:tracking-wider flex items-center justify-center gap-1 transition-all shadow-xs ${
               sizeError
                 ? 'bg-red-600 hover:bg-red-700 text-white animate-pulse'
                 : 'bg-[#16382C] hover:bg-[#0F2C22] text-[#C5A16E] hover:text-white'
             }`}
             title={selectedSize ? `Direct Checkout Size ${selectedSize}` : 'Select a size first to order now'}
           >
-            <Zap className="w-3 h-3 text-gold-400" />
+            <Zap className="w-3 h-3 text-gold-400 flex-shrink-0" />
             <span className="truncate">
-              {sizeError ? 'Pick Size' : selectedSize ? `Order (${selectedSize})` : 'Order Now'}
+              {sizeError ? (
+                'Pick Size'
+              ) : selectedSize ? (
+                `Order (${selectedSize})`
+              ) : (
+                <>
+                  <span className="sm:hidden">Buy Now</span>
+                  <span className="hidden sm:inline">Order Now</span>
+                </>
+              )}
             </span>
           </button>
         </div>

@@ -32,9 +32,9 @@ export default function AdminLogin() {
       <div className="bg-white p-8 sm:p-10 rounded-2xl border border-[#E7EBE7] max-w-md w-full space-y-6 shadow-luxury-md">
         <div className="text-center space-y-2">
           <div className="w-16 h-16 rounded-full overflow-hidden border border-[#C5A16E]/40 bg-[#FAF6F0] mx-auto shadow-sm flex items-center justify-center">
-            <img src="/logo.png" alt="Varshi Enterprises" className="w-full h-full object-cover" />
+            <img src="/logo.png" alt="UNLIMITED choice" className="w-full h-full object-cover" />
           </div>
-          <h1 className="font-serif text-2xl font-bold text-[#173D30] tracking-tight pt-1">VARSHI ENTERPRISES</h1>
+          <h1 className="font-serif text-2xl font-bold text-[#173D30] tracking-tight pt-1">UNLIMITED CHOICE</h1>
           <p className="text-xs text-[#727A74]">Administrative Operations Console</p>
         </div>
 

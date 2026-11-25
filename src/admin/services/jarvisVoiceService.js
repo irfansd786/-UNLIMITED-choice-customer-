@@ -48,7 +48,7 @@ export function getLastSpokenEndTime() {
 // Check if incoming transcript is an echo of what Jarvis just spoke through speakers
 export function isEchoOfJarvis(transcript) {
   if (!transcript) return false;
-  
+
   // 1. If received within 2.2 seconds of Jarvis speaking, high probability of speaker echo
   const timeSinceSpeaking = Date.now() - lastJarvisSpokenEndTime;
   if (timeSinceSpeaking < 2200) {
@@ -77,14 +77,14 @@ function loadJarvisMaleVoice() {
   const voices = window.speechSynthesis.getVoices() || [];
   if (voices.length === 0) return null;
 
-  const maleVoice = voices.find(v => 
-    (v.name.includes('Google UK English Male') || 
-     v.name.includes('George') || 
-     v.name.includes('Ryan') || 
-     v.name.includes('David') || 
-     v.name.includes('Guy') || 
-     v.name.includes('Natural') || 
-     v.name.includes('Daniel')) && v.lang.startsWith('en')
+  const maleVoice = voices.find(v =>
+    (v.name.includes('Google UK English Male') ||
+      v.name.includes('George') ||
+      v.name.includes('Ryan') ||
+      v.name.includes('David') ||
+      v.name.includes('Guy') ||
+      v.name.includes('Natural') ||
+      v.name.includes('Daniel')) && v.lang.startsWith('en')
   ) || voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('male'))
     || voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('female') && !v.name.toLowerCase().includes('zira') && !v.name.toLowerCase().includes('susan'))
     || voices.find(v => v.lang.startsWith('en'))
@@ -118,12 +118,12 @@ export function stopJarvisAudio() {
         window.speechSynthesis.resume();
       }
       window.__jarvisUtterance = null;
-    } catch (_) {}
+    } catch (_) { }
   }
   try {
     useJarvisStore.getState().setSpeaking(false);
     useJarvisStore.getState().setCurrentSpeakingText('');
-  } catch (_) {}
+  } catch (_) { }
 }
 
 // Split text into short, natural sentence chunks to eliminate Chrome 15s cutoff & overflow bugs
@@ -188,7 +188,7 @@ export function speakJarvis(text, onStart, onEnd) {
   try {
     useJarvisStore.getState().setSpeaking(true);
     useJarvisStore.getState().setCurrentSpeakingText(cleanText);
-  } catch (_) {}
+  } catch (_) { }
   if (onStart) onStart();
 
   const maleVoice = loadJarvisMaleVoice();
@@ -221,7 +221,7 @@ export function speakJarvis(text, onStart, onEnd) {
     try {
       useJarvisStore.getState().setSpeaking(false);
       useJarvisStore.getState().setCurrentSpeakingText('');
-    } catch (_) {}
+    } catch (_) { }
     if (onEnd) onEnd();
   };
 
@@ -332,7 +332,7 @@ export function playJarvisChime(type = 'wake') {
       osc.start(now);
       osc.stop(now + 0.18);
     }
-  } catch (_) {}
+  } catch (_) { }
 }
 
 function getStoreBaseUrl() {
@@ -347,9 +347,9 @@ function getApiBaseUrl() {
     return import.meta.env.VITE_API_URL;
   }
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    return 'https://unlimited-choice-backend.onrender.com/api';
+    return 'https://unlimited-choice-backend.onrender.com//api';
   }
-  return 'http://localhost:8000/api';
+  return 'https://unlimited-choice-backend.onrender.com/api';
 }
 
 // Check customer website & backend health
@@ -380,7 +380,7 @@ export async function checkCustomerWebHealth() {
         const prodData = await prodRes.json();
         result.productCount = prodData.total || (Array.isArray(prodData) ? prodData.length : 39);
       }
-    } catch (_) {}
+    } catch (_) { }
 
     try {
       await fetch(customerUrl, { mode: 'no-cors', cache: 'no-cache' });
@@ -390,7 +390,7 @@ export async function checkCustomerWebHealth() {
     }
 
     result.latencyMs = Math.max(12, Date.now() - startTime);
-    result.summary = result.customerOnline 
+    result.summary = result.customerOnline
       ? `Storefront & API nominal. Latency is ${result.latencyMs}ms with ${result.productCount} catalog products available, Chief.`
       : `Storefront check: verification pending. Backend is ${result.backendOnline ? 'online' : 'offline'}.`;
 
@@ -425,7 +425,7 @@ export async function generateFullBusinessBriefingSpeech(adminName = 'Chief') {
 
     let narrative = `${greeting} Here is today's store briefing: `;
     narrative += `We generated ₹${todayRev} in revenue across ${todayOrders} customer orders. `;
-    
+
     if (readyToPack > 0) {
       narrative += `${readyToPack} orders are awaiting packaging. `;
     } else {
@@ -465,7 +465,7 @@ export const STOP_ONLY_REGEX = /\b(stop|quiet|shut up|hush|silence|pause|enough|
 export function resolveCustomerWebCategory(input) {
   const text = (input || '').toLowerCase();
   const base = getStoreBaseUrl();
-  
+
   // Shirts & T-Shirts (including phonetic misrecognitions: shuts, shut, shits, shiet, shert, shurt, t-shirt)
   if (text.includes('shirt') || text.includes('shuts') || text.includes('shut') || text.includes('shiet') || text.includes('shits') || text.includes('shit') || text.includes('shert') || text.includes('shurt') || text.includes('tshirt') || text.includes('t-shirt') || text.includes('tee')) {
     return { url: `${base}/category/t-shirts`, name: 'Shirts & T-Shirts' };
@@ -530,8 +530,8 @@ export function parseJarvisCommand(rawTranscript) {
   }
 
   // 2. CLOSE CUSTOMER WEB VIEWER ("close customer web", "close store", "close customer page", "close web viewer", "close customer")
-  if ((clean.includes('close') || clean.includes('hide') || clean.includes('dismiss')) && 
-      (clean.includes('customer') || clean.includes('store') || clean.includes('web') || clean.includes('viewer') || clean.includes('page'))) {
+  if ((clean.includes('close') || clean.includes('hide') || clean.includes('dismiss')) &&
+    (clean.includes('customer') || clean.includes('store') || clean.includes('web') || clean.includes('viewer') || clean.includes('page'))) {
     return {
       type: 'CLOSE_CUSTOMER_WEB_INTENT',
       response: "Closing customer store viewer, Chief.",
@@ -540,7 +540,7 @@ export function parseJarvisCommand(rawTranscript) {
   }
 
   // 2.5 MODAL CANCELLATION ("no", "cancel", "cancel it", "don't save", "cancel that", "abort", "close", "cancel creation", "cancel product", "cancel coupon", "no cancel")
-  const isCancelModalPhrase = /^(no|cancel|cancel it|dont save|don't save|cancel that|abort|close|cancel creation|cancel product|cancel coupon|no cancel|close modal|discard)$/i.test(clean) || 
+  const isCancelModalPhrase = /^(no|cancel|cancel it|dont save|don't save|cancel that|abort|close|cancel creation|cancel product|cancel coupon|no cancel|close modal|discard)$/i.test(clean) ||
     (clean.includes('cancel') && (clean.includes('product') || clean.includes('coupon') || clean.includes('creation') || clean.includes('draft') || clean.includes('modal') || clean.includes('that')));
   if (isCancelModalPhrase && !clean.includes('order')) {
     return {
@@ -568,7 +568,7 @@ export function parseJarvisCommand(rawTranscript) {
       type: 'CANCEL_ORDERS_ACTION',
       cancelAll,
       orderRef: orderIdMatch ? orderIdMatch[1] : null,
-      response: cancelAll 
+      response: cancelAll
         ? "Cancelling all active customer orders in the database now, Chief..."
         : "Processing order cancellation, Chief...",
       action: 'CANCEL_ORDERS_ACTION'
@@ -585,8 +585,8 @@ export function parseJarvisCommand(rawTranscript) {
   }
 
   // 5. ORDER FULFILLMENT & PACKING ACTION ("pack all orders", "fulfill all orders", "deliver orders")
-  if ((clean.includes('pack') || clean.includes('fulfill') || clean.includes('deliver') || clean.includes('ship')) && 
-      (clean.includes('order') || clean.includes('all') || clean.includes('queue'))) {
+  if ((clean.includes('pack') || clean.includes('fulfill') || clean.includes('deliver') || clean.includes('ship')) &&
+    (clean.includes('order') || clean.includes('all') || clean.includes('queue'))) {
     const fulfillAll = clean.includes('all');
     return {
       type: 'FULFILL_ORDERS_ACTION',
@@ -598,16 +598,16 @@ export function parseJarvisCommand(rawTranscript) {
 
   // 6. VOICE-GUIDED COUPON CREATION ("new coupon", "create coupon", "add coupon", "new promo", "create compons", "new compons")
   if ((clean.includes('coupon') || clean.includes('compon') || clean.includes('promo') || clean.includes('discount code')) &&
-      (clean.includes('new') || clean.includes('create') || clean.includes('add') || clean.includes('make') || clean.includes('draft') || clean.includes('setup') || clean.includes('start'))) {
-    
+    (clean.includes('new') || clean.includes('create') || clean.includes('add') || clean.includes('make') || clean.includes('draft') || clean.includes('setup') || clean.includes('start'))) {
+
     // Extract discount percentage if spoken
     const percentMatch = clean.match(/(\d+)\s*(?:%|percent)/i);
     const discountVal = percentMatch ? parseInt(percentMatch[1], 10) : 20;
 
     // Extract custom code if spoken
     const codeMatch = clean.match(/(?:code|named|called|coupon|compon)\s+([a-z0-9]{3,12})/i);
-    const code = codeMatch && !['new', 'for', 'the', 'with', 'create', 'add', 'compons', 'coupon'].includes(codeMatch[1].toLowerCase()) 
-      ? codeMatch[1].toUpperCase() 
+    const code = codeMatch && !['new', 'for', 'the', 'with', 'create', 'add', 'compons', 'coupon'].includes(codeMatch[1].toLowerCase())
+      ? codeMatch[1].toUpperCase()
       : `SAVE${discountVal}`;
 
     return {
@@ -620,8 +620,8 @@ export function parseJarvisCommand(rawTranscript) {
   }
 
   // 7. CUSTOMER WEB HEALTH & DIAGNOSTICS ("check customer web", "store diagnostics", "is customer web online")
-  if ((clean.includes('check') || clean.includes('status') || clean.includes('health') || clean.includes('diagnostic')) && 
-      (clean.includes('customer') || clean.includes('store') || clean.includes('web') || clean.includes('online'))) {
+  if ((clean.includes('check') || clean.includes('status') || clean.includes('health') || clean.includes('diagnostic')) &&
+    (clean.includes('customer') || clean.includes('store') || clean.includes('web') || clean.includes('online'))) {
     return {
       type: 'CHECK_CUSTOMER_WEB',
       response: 'Running 24/7 customer website diagnostics, Chief...',
@@ -650,14 +650,14 @@ export function parseJarvisCommand(rawTranscript) {
     };
   }
 
-  if ((clean.includes('add') || clean.includes('create') || clean.includes('draft') || clean.includes('fill')) && 
-      (clean.includes('product') || clean.includes('item') || clean.includes('hoodie') || clean.includes('shirt') || clean.includes('jacket') || clean.includes('tee') || clean.includes('pant'))) {
-    
+  if ((clean.includes('add') || clean.includes('create') || clean.includes('draft') || clean.includes('fill')) &&
+    (clean.includes('product') || clean.includes('item') || clean.includes('hoodie') || clean.includes('shirt') || clean.includes('jacket') || clean.includes('tee') || clean.includes('pant'))) {
+
     let suggestedName = clean
       .replace(/\b(add|create|draft|publish|a|new|product|the|item|fill|them|and)\b/g, '')
       .trim();
 
-    suggestedName = suggestedName 
+    suggestedName = suggestedName
       ? suggestedName.charAt(0).toUpperCase() + suggestedName.slice(1)
       : 'Vintage Mineral Acid Wash Heavy Hoodie';
 

@@ -44,7 +44,7 @@ export default function JarvisProductBuilderModal() {
         compare_at_price: activeProductDraft.compare_at_price ? parseFloat(activeProductDraft.compare_at_price) : 4499,
         stock: parseInt(activeProductDraft.stock, 10) || 40,
         sku: `VE-${Date.now().toString().slice(-6)}`,
-        brand: 'Varshi Enterprises',
+        brand: 'UNLIMITED choice',
         material: activeProductDraft.material || '100% French Terry Cotton (450 GSM)',
         color: activeProductDraft.color || 'Onyx Mineral Wash',
         description: activeProductDraft.description || `${activeProductDraft.name} engineered with luxury streetwear craftsmanship.`,
@@ -96,7 +96,7 @@ export default function JarvisProductBuilderModal() {
                 </span>
               </div>
               <p className="text-[11px] text-[#727A74]">
-                Voice-guided catalog creation for Varshi Enterprises
+                Voice-guided catalog creation for UNLIMITED choice
               </p>
             </div>
           </div>

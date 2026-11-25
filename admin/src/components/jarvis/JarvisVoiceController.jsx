@@ -18,7 +18,7 @@ import { useJarvisStore } from '../../store/useJarvisStore';
 import { useAIAssistantStore } from '../../store/useAIAssistantStore';
 import { adminAIService, adminOrderService, adminCouponService, adminDashboardService } from '../../services/api';
 
-const BRIEFING_SESSION_KEY = 'varshi_jarvis_briefing_session_v3';
+const BRIEFING_SESSION_KEY = 'unlimited_choice_jarvis_briefing_v4';
 let isBriefingInitiatingGlobally = false;
 
 export default function JarvisVoiceController({ adminName = 'Chief' }) {
@@ -345,7 +345,7 @@ export default function JarvisVoiceController({ adminName = 'Chief' }) {
             compare_at_price: currentDraft.compare_at_price ? parseFloat(currentDraft.compare_at_price) : 4499,
             stock: parseInt(currentDraft.stock, 10) || 40,
             sku: `VE-${Date.now().toString().slice(-6)}`,
-            brand: 'Varshi Enterprises',
+            brand: 'UNLIMITED choice',
             material: currentDraft.material || '100% French Terry Cotton (450 GSM)',
             color: currentDraft.color || 'Onyx Mineral Wash',
             description: currentDraft.description || `${currentDraft.name} luxury menswear item.`,

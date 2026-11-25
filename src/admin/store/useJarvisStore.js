@@ -54,8 +54,8 @@ export const useJarvisStore = create((set, get) => ({
   
   setLastHeard: (text) => set({ lastHeard: text }),
   setLiveTranscript: (text) => set({ liveTranscript: text }),
-  setLastResponse: (text) => set({ lastResponse: text }),
-  setCurrentSpeakingText: (text) => set({ currentSpeakingText: text }),
+  setLastResponse: (text) => set({ lastResponse: typeof text === 'string' ? text.replace(/varshi\s+enterprises/gi, 'UNLIMITED choice') : text }),
+  setCurrentSpeakingText: (text) => set({ currentSpeakingText: typeof text === 'string' ? text.replace(/varshi\s+enterprises/gi, 'UNLIMITED choice') : text }),
 
   stopSpeaking: () => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {

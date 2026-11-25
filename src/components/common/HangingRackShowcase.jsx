@@ -171,6 +171,23 @@ export default function HangingRackShowcase() {
     };
   }, []);
 
+  // Close active garment preview when tapping/clicking outside the rack (useful on mobile)
+  useEffect(() => {
+    if (hoveredIdx === null) return;
+    const handleOutsidePress = (e) => {
+      if (rackRef.current && !rackRef.current.contains(e.target)) {
+        setHoveredIdx(null);
+        setIsHoveredRack(false);
+      }
+    };
+    document.addEventListener('touchstart', handleOutsidePress, { passive: true });
+    document.addEventListener('mousedown', handleOutsidePress);
+    return () => {
+      document.removeEventListener('touchstart', handleOutsidePress);
+      document.removeEventListener('mousedown', handleOutsidePress);
+    };
+  }, [hoveredIdx]);
+
   // Pause rotation when hovering or dragging
   useEffect(() => {
     isPausedRef.current = hoveredIdx !== null || isHoveredRack || isDraggingRack;
@@ -257,6 +274,7 @@ export default function HangingRackShowcase() {
 
     if (Math.abs(deltaX) > 4) {
       rackDragRef.current.hasMoved = true;
+      setHoveredIdx(null);
     }
 
     // Dynamic tilt in OPPOSITE direction of drag:
@@ -326,6 +344,7 @@ export default function HangingRackShowcase() {
 
     if (Math.abs(deltaX) > 4) {
       rackDragRef.current.hasMoved = true;
+      setHoveredIdx(null);
     }
 
     const targetTilt = Math.max(-20, Math.min(20, -stepDx * 1.4));
@@ -345,10 +364,16 @@ export default function HangingRackShowcase() {
     handleRackMouseUpOrLeave();
   };
 
-  // Single-click -> 360 Degree Interactive Studio Page (/studio/:slug)
+  // First tap on mobile (when not yet expanded) -> Show front-facing product view + price tag
+  // Subsequent click/tap -> 360 Degree Interactive Studio Page (/studio/:slug)
   // Double-click -> Full Product Details Page (/products/:slug)
-  const handleGarmentClick = (prod) => {
+  const handleGarmentClick = (prod, idx) => {
     if (rackDragRef.current.hasMoved) return;
+
+    if (hoveredIdx !== idx) {
+      setHoveredIdx(idx);
+      return;
+    }
 
     if (clickTimerRef.current) {
       clearTimeout(clickTimerRef.current);
@@ -420,7 +445,7 @@ export default function HangingRackShowcase() {
               return (
                 <div
                   key={`${prod.id}-${idx}`}
-                  onClick={() => handleGarmentClick(prod)}
+                  onClick={() => handleGarmentClick(prod, idx)}
                   onDoubleClick={() => handleGarmentDoubleClick(prod)}
                   onMouseEnter={() => setHoveredIdx(idx)}
                   onMouseLeave={() => setHoveredIdx(null)}

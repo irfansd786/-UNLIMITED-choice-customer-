@@ -27,7 +27,8 @@ export default function JarvisLiveSpeechColumn() {
     playJarvisChime('action');
   };
 
-  const displayText = currentSpeakingText || lastResponse || 'Good day, Chief. Jarvis AI Voice Assistant is active and listening for your commands.';
+  const rawDisplayText = currentSpeakingText || lastResponse || 'Good day, Chief. UNLIMITED choice Jarvis AI Voice Assistant is active and listening for your commands.';
+  const displayText = rawDisplayText.replace(/varshi\s+enterprises/gi, 'UNLIMITED choice');
 
   // Minimized View (Clean 1-line bar)
   if (isMinimized) {

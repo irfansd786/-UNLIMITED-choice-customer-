@@ -626,10 +626,6 @@ export default function ProductStudio() {
         }
       );
 
-      useToastStore.getState().addToast(
-        `Added ${activeProduct.name} (${currentVariant.colorName}, Size ${selectedSize}) to bag!`,
-        'success'
-      );
       setJustAdded(true);
       setTimeout(() => setJustAdded(false), 2400);
     } catch (err) {
@@ -756,22 +752,22 @@ export default function ProductStudio() {
       style={dynamicStudioBg}
     >
       {/* Top Bar: Clean Minimalist Navigation & Single 'View Full Details' Button */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2.5 sm:pt-3.5 pb-1 z-30 flex-shrink-0">
-        <div className="flex items-center justify-between">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2.5 sm:pt-3.5 pb-1 z-30 flex-shrink-0">
+        <div className="flex items-center justify-between gap-2">
           
           {/* Back to Storefront */}
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-700 hover:text-black uppercase tracking-wider transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-700 hover:text-black uppercase tracking-wider transition-colors flex-shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Storefront</span>
           </Link>
 
-          {/* Breadcrumb info */}
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <span className="text-[#C5A880] font-bold uppercase tracking-wider text-[11px]">360° Studio</span>
-            <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
+          {/* Breadcrumb info (desktop/tablet) */}
+          <div className="hidden md:flex items-center gap-2 text-xs text-gray-600 min-w-0">
+            <span className="text-[#C5A880] font-bold uppercase tracking-wider text-[11px] flex-shrink-0">360° Studio</span>
+            <ChevronRight className="w-3.5 h-3.5 text-gray-300 flex-shrink-0" />
             <span className="font-semibold text-gray-800 truncate max-w-xs">{activeProduct.name}</span>
           </div>
 
@@ -779,10 +775,11 @@ export default function ProductStudio() {
           <button
             type="button"
             onClick={() => navigate(`/products/${activeProduct.slug}?color=${currentVariant.id}&size=${selectedSize}`)}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/95 hover:bg-white text-gray-900 border border-gray-200/90 text-xs font-bold uppercase tracking-wider shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/95 hover:bg-white text-gray-900 border border-gray-200/90 text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-2xs hover:shadow-xs transition-all cursor-pointer flex-shrink-0 whitespace-nowrap"
             title={`View full details for ${activeProduct.name}`}
           >
-            <span>View Full Details</span>
+            <span className="sm:hidden">View Details</span>
+            <span className="hidden sm:inline">View Full Details</span>
             <ExternalLink className="w-3.5 h-3.5 text-[#16382C]" />
           </button>
         </div>
@@ -803,7 +800,7 @@ export default function ProductStudio() {
               PHYSICAL LUXURY STREETWEAR PRICE TAG (Shows exact Color & Size chosen)
               ===================================================================== */}
           <div 
-            className="absolute -top-1 -left-8 sm:-left-24 md:-left-36 lg:-left-44 z-30 flex flex-col items-end pointer-events-none sm:pointer-events-auto group cursor-default"
+            className="absolute -top-1 left-0 sm:-left-24 md:-left-36 lg:-left-44 z-30 flex flex-col items-end pointer-events-none sm:pointer-events-auto group cursor-default"
             style={{
               transform: 'rotate(-4deg)',
               transformOrigin: 'top right'

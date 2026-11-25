@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || (
   typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://unlimited-choice-backend.onrender.com/api'
-    : 'http://localhost:8000/api'
+    ? 'https://unlimited-choice-backend.onrender.com//api'
+    : 'https://unlimited-choice-backend.onrender.com/api'
 );
 
 const api = axios.create({
@@ -28,7 +28,7 @@ api.interceptors.response.use(
     const message = Array.isArray(detail)
       ? detail.map(d => d.msg || d.message).join(', ')
       : detail || error.message || 'An error occurred';
-    
+
     if (error.response?.status === 401 && localStorage.getItem('varshi_admin_token')) {
       localStorage.removeItem('varshi_admin_token');
       localStorage.removeItem('varshi_admin_user');

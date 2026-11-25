@@ -155,10 +155,14 @@ export default function AIBusinessAssistant() {
         loadConversations();
       }
 
+      const cleanReply = typeof res.reply === 'string'
+        ? res.reply.replace(/varshi\s+enterprises/gi, 'UNLIMITED choice')
+        : res.reply;
+
       const asstMsg = {
         id: res.message_id || 'asst-' + Date.now(),
         role: 'assistant',
-        content: res.reply,
+        content: cleanReply,
         action_type: res.action_type,
         action_data: res.action_payload,
         requires_confirmation: res.requires_confirmation,
@@ -167,10 +171,10 @@ export default function AIBusinessAssistant() {
 
       setMessages(prev => [...prev, asstMsg]);
 
-      if (autoSpeak && res.reply) {
+      if (autoSpeak && cleanReply) {
         setIsPlayingAudio(true);
         speakJarvis(
-          res.reply,
+          cleanReply,
           () => setIsPlayingAudio(true),
           () => setIsPlayingAudio(false)
         );
@@ -276,10 +280,14 @@ export default function AIBusinessAssistant() {
         loadConversations();
       }
 
+      const cleanReply = typeof res.reply === 'string'
+        ? res.reply.replace(/varshi\s+enterprises/gi, 'UNLIMITED choice')
+        : res.reply;
+
       const asstMsg = {
         id: res.message_id || 'asst-' + Date.now(),
         role: 'assistant',
-        content: res.reply,
+        content: cleanReply,
         action_type: res.action_type,
         action_data: res.action_payload,
         requires_confirmation: res.requires_confirmation,
@@ -288,10 +296,10 @@ export default function AIBusinessAssistant() {
 
       setMessages(prev => [...prev, asstMsg]);
 
-      if (autoSpeak && res.reply) {
+      if (autoSpeak && cleanReply) {
         setIsPlayingAudio(true);
         speakJarvis(
-          res.reply,
+          cleanReply,
           () => setIsPlayingAudio(true),
           () => setIsPlayingAudio(false)
         );

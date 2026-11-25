@@ -180,7 +180,7 @@ export default function AdminLayout() {
       const dateFileStr = new Date().toISOString().slice(0, 10);
 
       // Section 1: Executive Summary
-      let csv = 'VARSHI ENTERPRISES - EXECUTIVE STORE OPERATIONS & AUDIT REPORT\n';
+      let csv = 'UNLIMITED CHOICE - EXECUTIVE STORE OPERATIONS & AUDIT REPORT\n';
       csv += `Generated At,"${nowStr}"\n`;
       csv += `Admin User,"${user?.full_name || 'Admin'} (${user?.email || 'admin@varshi.com'})"\n`;
       csv += `Data Source,"Certified Live Store Database"\n\n`;
@@ -256,7 +256,7 @@ export default function AdminLayout() {
       <div className="lg:hidden bg-white/95 backdrop-blur border-b border-[#D8E3DC] px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full overflow-hidden border border-[#C5A16E]/50 bg-[#FAF6F0] flex-shrink-0 shadow-xs">
-            <img src="/logo.png" alt="Varshi Enterprises" className="w-full h-full object-cover" />
+            <img src="/logo.png" alt="UNLIMITED choice" className="w-full h-full object-cover" />
           </div>
           <div>
             <span className="font-serif font-black text-sm text-[#173D30] tracking-wide block leading-none">VARSHI</span>
@@ -302,12 +302,12 @@ export default function AdminLayout() {
           <div className="p-5 border-b border-[#E3EDE6] flex items-center justify-between">
             <div className={`flex items-center gap-3 min-w-0 ${collapsed ? 'lg:justify-center lg:w-full' : ''}`}>
               <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#C5A16E]/40 bg-[#FAF6F0] flex-shrink-0 shadow-xs">
-                <img src="/logo.png" alt="Varshi Enterprises" className="w-full h-full object-cover" />
+                <img src="/logo.png" alt="UNLIMITED choice" className="w-full h-full object-cover" />
               </div>
               {!collapsed && (
                 <div className="min-w-0">
-                  <h1 className="font-serif font-black text-base text-[#173D30] tracking-wider leading-none">VARSHI</h1>
-                  <span className="text-[9px] font-bold text-[#728276] tracking-[0.2em] uppercase mt-1 block">ENTERPRISES</span>
+                  <h1 className="font-sans font-black text-sm text-[#173D30] tracking-tight leading-none">UNLIMITED</h1>
+                  <span className="text-[9px] font-bold text-[#728276] tracking-wider lowercase mt-1 block">choice admin</span>
                 </div>
               )}
             </div>

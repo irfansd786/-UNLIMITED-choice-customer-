@@ -18,7 +18,7 @@ import { useJarvisStore } from '../../store/useJarvisStore';
 import { useAIAssistantStore } from '../../store/useAIAssistantStore';
 import { adminAIService, adminOrderService, adminCouponService, adminDashboardService } from '../../services/api';
 
-const BRIEFING_SESSION_KEY = 'varshi_jarvis_briefing_session_v3';
+const BRIEFING_SESSION_KEY = 'unlimited_choice_jarvis_briefing_v4';
 let isBriefingInitiatingGlobally = false;
 
 export default function JarvisVoiceController({ adminName = 'Chief' }) {

@@ -94,7 +94,7 @@ export default function JarvisCouponModal() {
                 </span>
               </div>
               <p className="text-[11px] text-[#727A74]">
-                Voice-guided promotional coupon creation for Varshi Enterprises
+                Voice-guided promotional coupon creation for UNLIMITED choice
               </p>
             </div>
           </div>
